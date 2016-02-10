@@ -1,0 +1,333 @@
+﻿<!DOCTYPE html>
+<html lang="en-US">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" />
+
+    <link type="text/css" rel="stylesheet" href="reset.css" />
+    <link type="text/css" rel="stylesheet" href="hw1_style.css" />
+    <script type="text/javascript" src="hw1.js"></script>
+    <title>My Blog</title>
+</head>
+
+<body class="home blog custom-font-enabled single-author">
+    <div id="page" class="hfeed site">
+        <header id="masthead" class="site-header" role="banner">
+            <hgroup>
+                <h1 class="site-title"><a href="http://adam-carter.com/" title="Adam Carter" rel="home">Joe User</a></h1>
+                <h2 class="site-description">My Blog.</h2>
+            </hgroup>
+
+            <nav id="site-navigation" class="main-navigation" role="navigation">
+                <h3 class="menu-toggle">Main</h3>
+                <a class="assistive-text" href="#content" title="Skip to content">Skip to content</a>
+                <div class="menu-main-container">
+                    <ul id="menu-main" class="nav-menu">
+                        <li id="menu-item-720" class="menu-item menu-item-type-custom menu-item-object-custom current-menu-item current_page_item menu-item-home menu-item-720"><a href="http://adam-carter.com">Home</a></li>
+                        <li id="menu-item-722" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-has-children menu-item-722">
+                            <a href="http://adam-carter.com/tools">Tools</a>
+                            <ul class="sub-menu">
+                                <li id="menu-item-726" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-726"><a href="http://adam-carter.com/tools/calendar">Calendar Generator</a></li>
+                            </ul>
+                        </li>
+                        <li id="menu-item-724" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-724"><a href="http://adam-carter.com/about">About</a></li>
+                    </ul>
+                </div>
+            </nav><!-- #site-navigation -->
+
+        </header><!-- #masthead -->
+
+        <div id="main" class="wrapper">
+            <div id="primary" class="site-content">
+                <div id="content" role="main">
+
+
+                    <article id="post-690" class="post-690 post type-post status-publish format-standard hentry category-programming category-tips tag-code tag-net tag-c tag-sql-sever tag-entityframework">
+                        <header class="entry-header">
+                            <h1 class="entry-title">
+                                <a href="http://adam-carter.com/posts/690" title="Permalink to Storing Large Binary Data (e.g. VARBINARY(MAX)) in SQL Server CE and EntityFramework" rel="bookmark">Storing Large Binary Data (e.g. VARBINARY(MAX)) in SQL Server CE and EntityFramework</a>
+                            </h1>
+                            <div class="comments-link">
+                                <a href="http://adam-carter.com/posts/690#respond"><span class="leave-reply">Leave a reply</span></a>
+                            </div><!-- .comments-link -->
+                        </header><!-- .entry-header -->
+
+                        <div class="entry-content">
+                            <p>
+                                Unlike full-blown SQL Server, SQL Server CE (Compact Edition) restricts VARBINARY data types to a maximum size of roughly 8k.  Fortunately, there�s an easy enough hack to get around this.  According to the <a href="http://msdn.microsoft.com/en-us/library/ms172424%28v=SQL.110%29.aspx">MSDN</a>, SQL Server CE supports image data types up to a size of up to 1GB.  Since images are just a specific binary format, they�ll work for any other binary data type.  As such, all you have to do is decorate the desired model property as so:
+                            </p>
+<pre>
+[Required]
+[Column(TypeName = "image")]
+public byte[] Data { get; set; }
+</pre>
+                            <p>
+                                Unfortunately, there�s also a bug with EntityFramework not properly detecting the maximum possible size for SQL Server CE.  In order to get around this, you must also add the following code to your data context:
+                            </p>
+<pre>
+public class MyDbContext : DbContext
+{
+    public DbSet&lt;DataClass&gt; Data { get; set; }
+    protected override bool ShouldValidateEntity(DbEntityEntry entityEntry)
+    {
+        //Replace &quot;DataClass&quot; with the class that needs to store large data types
+        if (entityEntry.Entity is DataClass)
+        {
+            return false;
+        }
+        return base.ShouldValidateEntity(entityEntry);
+    }
+}
+</pre>
+                            <p>
+                                Thanks to <a href="http://stackoverflow.com/questions/5737733/error-storing-image-in-sql-ce-4-0-with-asp-net-mvc-3-and-entity-framework-4-1-co">Charles at StackOverflow</a> and <a href="http://erikej.blogspot.com/2011/04/saving-images-to-sql-server-compact.html">Erik</a> for posting the solution to this frustrating problem.<br />
+                                <br />
+                                &#8211;Adam
+                            </p>
+                        </div><!-- .entry-content -->
+
+                        <footer class="entry-meta">
+                            This entry was posted in <a href="http://adam-carter.com/posts/category/programming" rel="category tag">Programming</a>, <a href="http://adam-carter.com/posts/category/tips" rel="category tag">Tips</a> and tagged <a href="http://adam-carter.com/posts/tag/code" rel="tag">code</a>, <a href="http://adam-carter.com/posts/tag/net" rel="tag">.net</a>, <a href="http://adam-carter.com/posts/tag/c" rel="tag">c#</a>, <a href="http://adam-carter.com/posts/tag/sql-sever" rel="tag">sql sever</a>, <a href="http://adam-carter.com/posts/tag/entityframework" rel="tag">entityframework</a> on <a href="http://adam-carter.com/posts/690" title="3:56 PM" rel="bookmark"><time class="entry-date" datetime="2012-05-30T15:56:24+00:00">May 30, 2012</time></a><span class="by-author"> by <span class="author vcard"><a class="url fn n" href="http://adam-carter.com/posts/author/acarter" title="View all posts by acarter" rel="author">acarter</a></span></span>.
+                        </footer><!-- .entry-meta -->
+                    </article><!-- #post -->
+
+                    <article id="post-684" class="post-684 post type-post status-publish format-standard hentry category-programming category-tips tag-code tag-net tag-visualstudio">
+                        <header class="entry-header">
+                            <h1 class="entry-title">
+                                <a href="http://adam-carter.com/posts/684" title="Permalink to How to not hardcode AspNetDevelopmentServerHost attribute when unit testing" rel="bookmark">How to not hardcode AspNetDevelopmentServerHost attribute when unit testing</a>
+                            </h1>
+                            <div class="comments-link">
+                                <a href="http://adam-carter.com/posts/684#respond"><span class="leave-reply">Leave a reply</span></a>
+                            </div><!-- .comments-link -->
+                        </header><!-- .entry-header -->
+
+                        <div class="entry-content">
+                            <p>
+                                By default, whenever you have VS2010 generate a new unit test for a web method (an MVC controller in my case), it creates a hard-linked file path in the &quot;AspNetDevelopmentServerHost&quot; attribute.  This may work fine if you&#8217;re the sole developer and code on only one machine, but what about when you work on a team or have multiple machines that will invariably have different file structures?  MS recommends using &quot;<a href="http://msdn.microsoft.com/en-us/library/ms243136(v=vs.80).aspx">%PathToWebRoot%</a>&quot;, but at least in my case, it always resolves to the default Visual Studio project folder in your User directory.  Thankfully, you can also use the &quot;$(SolutionDir)&quot; macro, which should resolve to your project directory, wherever that may be.  Thanks to <a href="http://www.skonet.com/Articles_Archive/How_To_Configure_ASP_NET_Unit_Tests_in_Visual_Studio_2010.aspx">Jason Skowronek</a> for that tip.
+                            </p>
+                            <p>
+                                &#8211;Adam
+                            </p>
+                        </div><!-- .entry-content -->
+
+                        <footer class="entry-meta">
+                            This entry was posted in <a href="http://adam-carter.com/posts/category/programming" rel="category tag">Programming</a>, <a href="http://adam-carter.com/posts/category/tips" rel="category tag">Tips</a> and tagged <a href="http://adam-carter.com/posts/tag/code" rel="tag">code</a>, <a href="http://adam-carter.com/posts/tag/net" rel="tag">.net</a>, <a href="http://adam-carter.com/posts/tag/visualstudio" rel="tag">visualstudio</a> on <a href="http://adam-carter.com/posts/684" title="11:41 AM" rel="bookmark"><time class="entry-date" datetime="2011-12-05T11:41:29+00:00">December 5, 2011</time></a><span class="by-author"> by <span class="author vcard"><a class="url fn n" href="http://adam-carter.com/posts/author/acarter" title="View all posts by acarter" rel="author">acarter</a></span></span>.
+                        </footer><!-- .entry-meta -->
+                    </article><!-- #post -->
+
+                    <article id="post-635" class="post-635 post type-post status-publish format-standard hentry category-tips tag-mac tag-vnc">
+                        <header class="entry-header">
+                            <h1 class="entry-title">
+                                <a href="http://adam-carter.com/posts/635" title="Permalink to Error When Connecting to Mac OS X 10.7 Lion through VNC" rel="bookmark">Error When Connecting to Mac OS X 10.7 Lion through VNC</a>
+                            </h1>
+                            <div class="comments-link">
+                                <a href="http://adam-carter.com/posts/635#respond"><span class="leave-reply">Leave a reply</span></a>
+                            </div><!-- .comments-link -->
+                        </header><!-- .entry-header -->
+
+                        <div class="entry-content">
+                            <p>Quick tip: if you&#8217;re getting errors (e.g. instant disconnect or won&#8217;t connect) when connecting to your mac through VNC, try the following:</p>
+                            <ul>
+                                <li>
+                                    Be sure to specify a password under &quot;computer settings&quot; on your mac.
+                                </li>
+                                <li>
+                                    Set the &quot;color level&quot; to full (all available colors) on your VNC client.  In RealVNC, these can be found by clicking on the options button.
+                                </li>
+                            </ul>
+                            <p>Thanks to Dundz at the <a href="http://macosx.com/forums/mac-os-x-system-mac-software/299416-cant-connect-vnc-remotly.html">macosx.com</a> forums.</p>
+                            <p>
+                                &#8211;Adam
+                            </p>
+                        </div><!-- .entry-content -->
+
+                        <footer class="entry-meta">
+                            This entry was posted in <a href="http://adam-carter.com/posts/category/tips" rel="category tag">Tips</a> and tagged <a href="http://adam-carter.com/posts/tag/mac" rel="tag">mac</a>, <a href="http://adam-carter.com/posts/tag/vnc" rel="tag">vnc</a> on <a href="http://adam-carter.com/posts/635" title="3:17 PM" rel="bookmark"><time class="entry-date" datetime="2011-09-18T15:17:02+00:00">September 18, 2011</time></a><span class="by-author"> by <span class="author vcard"><a class="url fn n" href="http://adam-carter.com/posts/author/acarter" title="View all posts by acarter" rel="author">acarter</a></span></span>.
+                        </footer><!-- .entry-meta -->
+                    </article><!-- #post -->
+
+                    <article id="post-624" class="post-624 post type-post status-publish format-standard hentry category-programming category-tips tag-code tag-net tag-c tag-ria-services">
+                        <header class="entry-header">
+                            <h1 class="entry-title">
+                                <a href="http://adam-carter.com/posts/624" title="Permalink to &#8220;The property is read only&#8221; Error Using RIA Services" rel="bookmark">&#8220;The property is read only&#8221; Error Using RIA Services</a>
+                            </h1>
+                            <div class="comments-link">
+                                <a href="http://adam-carter.com/posts/624#respond"><span class="leave-reply">Leave a reply</span></a>
+                            </div><!-- .comments-link -->
+                        </header><!-- .entry-header -->
+
+                        <div class="entry-content">
+                            <p>
+                                If you&#8217;re trying to modify the property of an object automagically generated from RIA Services within a Silverlight application and you&#8217;re getting a runtime error indicating that the the property is read only, here&#8217;s a simple fix.  Simply add the attribute &#8220;[Editable(true)]&#8221; from System.ComponentModel.DataAnnotations at the top of the field that you&#8217;d like to be editable.
+                            </p>
+                            <p>
+                                Is it just me or are the number of attributes needed to be placed before each property getting a little ridiculous?<br />
+                                &#8211;Adam
+                            </p>
+                        </div><!-- .entry-content -->
+
+                        <footer class="entry-meta">
+                            This entry was posted in <a href="http://adam-carter.com/posts/category/programming" rel="category tag">Programming</a>, <a href="http://adam-carter.com/posts/category/tips" rel="category tag">Tips</a> and tagged <a href="http://adam-carter.com/posts/tag/code" rel="tag">code</a>, <a href="http://adam-carter.com/posts/tag/net" rel="tag">.net</a>, <a href="http://adam-carter.com/posts/tag/c" rel="tag">c#</a>, <a href="http://adam-carter.com/posts/tag/ria-services" rel="tag">ria services</a> on <a href="http://adam-carter.com/posts/624" title="9:36 AM" rel="bookmark"><time class="entry-date" datetime="2011-07-13T09:36:06+00:00">July 13, 2011</time></a><span class="by-author"> by <span class="author vcard"><a class="url fn n" href="http://adam-carter.com/posts/author/acarter" title="View all posts by acarter" rel="author">acarter</a></span></span>.
+                        </footer><!-- .entry-meta -->
+                    </article><!-- #post -->
+
+                    <article id="post-556" class="post-556 post type-post status-publish format-standard hentry category-programming tag-net tag-mvc tag-sql-sever">
+                        <header class="entry-header">
+                            <h1 class="entry-title">
+                                <a href="http://adam-carter.com/posts/556" title="Permalink to Invalid object name &#8216;dbo.xxx&#8217; using MVC3 and SQL Server" rel="bookmark">Invalid object name &#8216;dbo.xxx&#8217; using MVC3 and SQL Server</a>
+                            </h1>
+                            <div class="comments-link">
+                                <a href="http://adam-carter.com/posts/556#comments">13 Replies</a>
+                            </div><!-- .comments-link -->
+                        </header><!-- .entry-header -->
+
+                        <div class="entry-content">
+                            <p>When working through the Movies tutorial on the <a href="http://www.asp.net/mvc/tutorials/getting-started-with-mvc3-part6-cs">ASP.NET website</a>, I decided that it&#8217;d be fun to try to switch the data provider from SQL Compact to the full version of SQL Server 2008.  In preparation for the move, I created a new (blank) database and gave the appropriate permissions to my test account.  However, after altering my connection string to accommodate SQL Server 2008, I received the following message:</p>
+                            <p>
+                                <strong><em>Invalid object name &#8216;dbo.Movies&#8217;.</em></strong>
+                            </p>
+                            <p>
+                                At first, I thought that my connection string was off, but it turns out that for Entity Framework to automagically create database tables and relationships, the database must not already exist.  As such, simply deleting the blank database completely fixed the problem.  This, of course, means that your SQL Server user must have db create privileges, which is something that I don&#8217;t grant my test account.  To get around this, use more powerful credentials for the initial connection that creates the database.  Afterwards, you can switch to a more restricted login.
+                            </p>
+                            <p>
+                                &#8211;Adam
+                            </p>
+                        </div><!-- .entry-content -->
+
+                        <footer class="entry-meta">
+                            This entry was posted in <a href="http://adam-carter.com/posts/category/programming" rel="category tag">Programming</a> and tagged <a href="http://adam-carter.com/posts/tag/net" rel="tag">.net</a>, <a href="http://adam-carter.com/posts/tag/mvc" rel="tag">mvc</a>, <a href="http://adam-carter.com/posts/tag/sql-sever" rel="tag">sql sever</a> on <a href="http://adam-carter.com/posts/556" title="10:52 AM" rel="bookmark"><time class="entry-date" datetime="2011-05-10T10:52:47+00:00">May 10, 2011</time></a><span class="by-author"> by <span class="author vcard"><a class="url fn n" href="http://adam-carter.com/posts/author/acarter" title="View all posts by acarter" rel="author">acarter</a></span></span>.
+                        </footer><!-- .entry-meta -->
+                    </article><!-- #post -->
+
+                    <nav id="nav-below" class="navigation" role="navigation">
+                        <h3 class="assistive-text">Post navigation</h3>
+                        <div class="nav-previous alignleft"><a href="http://adam-carter.com/page/2"><span class="meta-nav">&larr;</span> Older posts</a></div>
+                        <div class="nav-next alignright"></div>
+                    </nav><!-- #nav-below .navigation -->
+
+
+                </div><!-- #content -->
+            </div><!-- #primary -->
+
+
+            <div id="secondary" class="widget-area" role="complementary">
+                <aside id="categories-187432771" class="widget widget_categories">
+                    <h3 class="widget-title">Categories</h3>		
+					<ul>
+                        <li class="cat-item cat-item-11">
+                            <a href="http://adam-carter.com/posts/category/personal">Personal</a>
+                        </li>
+                        <li class="cat-item cat-item-8">
+                            <a href="http://adam-carter.com/posts/category/programming">Programming</a>
+                        </li>
+                        <li class="cat-item cat-item-29">
+                            <a href="http://adam-carter.com/posts/category/tips">Tips</a>
+                        </li>
+                        <li class="cat-item cat-item-1">
+                            <a href="http://adam-carter.com/posts/category/uncategorized">Uncategorized</a>
+                        </li>
+                    </ul>
+                </aside><aside id="archives-2" class="widget widget_archive">
+                    <h3 class="widget-title">Archives</h3>		<ul>
+                        <li><a href='http://adam-carter.com/posts/date/2012/05'>May 2012</a></li>
+                        <li><a href='http://adam-carter.com/posts/date/2011/12'>December 2011</a></li>
+                        <li><a href='http://adam-carter.com/posts/date/2011/09'>September 2011</a></li>
+                        <li><a href='http://adam-carter.com/posts/date/2011/07'>July 2011</a></li>
+                        <li><a href='http://adam-carter.com/posts/date/2011/05'>May 2011</a></li>
+                        <li><a href='http://adam-carter.com/posts/date/2011/02'>February 2011</a></li>
+                        <li><a href='http://adam-carter.com/posts/date/2010/12'>December 2010</a></li>
+                        <li><a href='http://adam-carter.com/posts/date/2010/07'>July 2010</a></li>
+                        <li><a href='http://adam-carter.com/posts/date/2010/06'>June 2010</a></li>
+                        <li><a href='http://adam-carter.com/posts/date/2010/05'>May 2010</a></li>
+                        <li><a href='http://adam-carter.com/posts/date/2010/03'>March 2010</a></li>
+                        <li><a href='http://adam-carter.com/posts/date/2010/02'>February 2010</a></li>
+                        <li><a href='http://adam-carter.com/posts/date/2010/01'>January 2010</a></li>
+                        <li><a href='http://adam-carter.com/posts/date/2009/12'>December 2009</a></li>
+                        <li><a href='http://adam-carter.com/posts/date/2009/06'>June 2009</a></li>
+                        <li><a href='http://adam-carter.com/posts/date/2009/01'>January 2009</a></li>
+                        <li><a href='http://adam-carter.com/posts/date/2008/12'>December 2008</a></li>
+                        <li><a href='http://adam-carter.com/posts/date/2008/10'>October 2008</a></li>
+                        <li><a href='http://adam-carter.com/posts/date/2008/08'>August 2008</a></li>
+                        <li><a href='http://adam-carter.com/posts/date/2008/07'>July 2008</a></li>
+                    </ul>
+                </aside><aside id="calendar-2" class="widget widget_calendar">
+                    <div id="calendar_wrap" class="calendar_wrap">
+                        <table id="wp-calendar">
+                            <caption>January 2016</caption>
+                            <thead>
+                                <tr>
+                                    <th scope="col" title="Monday">M</th>
+                                    <th scope="col" title="Tuesday">T</th>
+                                    <th scope="col" title="Wednesday">W</th>
+                                    <th scope="col" title="Thursday">T</th>
+                                    <th scope="col" title="Friday">F</th>
+                                    <th scope="col" title="Saturday">S</th>
+                                    <th scope="col" title="Sunday">S</th>
+                                </tr>
+                            </thead>
+
+                            <tfoot>
+                                <tr>
+                                    <td colspan="3" id="prev"><a href="http://adam-carter.com/posts/date/2012/05">&laquo; May</a></td>
+                                    <td class="pad">&nbsp;</td>
+                                    <td colspan="3" id="next" class="pad">&nbsp;</td>
+                                </tr>
+                            </tfoot>
+
+                            <tbody>
+                                <tr>
+                                    <td colspan="4" class="pad">&nbsp;</td>
+                                    <td>1</td>
+                                    <td>2</td>
+                                    <td>3</td>
+                                </tr>
+                                <tr>
+                                    <td>4</td>
+                                    <td>5</td>
+                                    <td>6</td>
+                                    <td>7</td>
+                                    <td>8</td>
+                                    <td>9</td>
+                                    <td>10</td>
+                                </tr>
+                                <tr>
+                                    <td>11</td>
+                                    <td>12</td>
+                                    <td>13</td>
+                                    <td>14</td>
+                                    <td>15</td>
+                                    <td>16</td>
+                                    <td id="today">17</td>
+                                </tr>
+                                <tr>
+                                    <td>18</td>
+                                    <td>19</td>
+                                    <td>20</td>
+                                    <td>21</td>
+                                    <td>22</td>
+                                    <td>23</td>
+                                    <td>24</td>
+                                </tr>
+                                <tr>
+                                    <td>25</td>
+                                    <td>26</td>
+                                    <td>27</td>
+                                    <td>28</td>
+                                    <td>29</td>
+                                    <td>30</td>
+                                    <td>31</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </aside>
+            </div><!-- #secondary -->
+        </div><!-- #main .wrapper -->
+        <footer id="colophon" role="contentinfo">
+            <div class="site-info">
+                <a href="http://wordpress.org/" title="Semantic Personal Publishing Platform">Proudly powered by WordPress</a>
+            </div><!-- .site-info -->
+        </footer><!-- #colophon -->
+    </div><!-- #page -->
+</body>
+</html>

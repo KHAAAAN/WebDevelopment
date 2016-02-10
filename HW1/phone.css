@@ -1,0 +1,256 @@
+body {		
+	font-family: Lucida Grande, Helvetica, Arial, sans-serif;
+	
+	padding-top: 250px;
+
+
+	background:	
+		url(coolPattern.jpg)
+		top center / 1920px 713px
+		no-repeat
+}
+
+/*set up columns*/
+#primary{
+	margin:auto;
+	width: 1100px;
+	height: 100%;
+	width: 80%;
+	box-sizing: border-box;
+	padding-bottom: 100px;
+}
+
+#secondary{
+	margin: auto;
+	width: 50%;
+	height: 100%;
+	border-style: solid;
+	border-width: thin;
+	border-color: #EDEDED;
+	padding-left: 35px;
+}
+
+#site-navigation{
+	z-index: 100;	
+	position:fixed;
+	left:0;
+	top: 0;
+	width: 100%; height:40px;
+	/* Adds the transparent background */
+	background-color: rgba(0, 0, 0, 0.8);
+	color: rgba(1, 1, 1, 0.8);
+	text-align: center;
+}
+
+#site-navigation a {
+	font-size: 14px;
+	font-weight: bold;
+	color: #FFFFFF; 
+	text-decoration: none;
+}
+
+#site-navigation a:hover{
+	color: gray;
+}
+
+.menu-main-container{
+	height: 100%;
+}
+
+#menu-main{ /*ul*/
+	margin: 10px 125px 0 0;
+	height: 100%;
+}
+
+#menu-main li{
+	position: relative;
+	display: inline-block; height: 100%; width: 100px; 
+}
+
+#menu-main li ul{
+	margin-top:9px;
+	padding-left:30px;
+	position: absolute;
+	display: none;
+	left: 0;
+	background-color: rgba(0, 0, 0, 0.8);
+	color: rgba(1, 1, 1, 0.8);
+	text-align:left;
+	/* Adds shadow to the bottom of the bar */
+	-webkit-box-shadow: 0px 0px 8px 0px #000000;
+	-moz-box-shadow: 0px 0px 8px 0px #000000;
+	box-shadow: 0px 0px 8px 0px #000000;
+}
+
+#menu-main li ul li {
+	white-space: no-wrap;
+}
+
+#menu-item-722:hover > ul {
+	display: block;
+}
+
+h3.menu-toggle {
+	font-size: 25px;
+	font-weight: bold;
+	
+	position: absolute;
+	margin: 4px 0px 0px 15px;
+	color: #FFFFFF;
+}
+
+.assistive-text {
+	position: fixed;
+	top: 12px;
+	right: 10px;
+}
+
+h1.site-title{
+	text-align: center;
+}
+
+h1.site-title a{
+	color: #FFFFFF;	
+	text-decoration: none;
+	font-size: 72px;
+}
+
+h2.site-description {
+	color: #FFFFFF;
+	padding-bottom:320px;
+	text-align: center;
+}
+
+h1.entry-title a{
+	text-decoration: none;
+	color: #FF1543;
+}
+
+h1.entry-title a:hover{
+	color: gray;
+}
+
+a[href] {
+	color: #FF1543;
+}
+
+a[href]:hover{
+	color: gray;
+}
+
+#post-690{
+	border-top-style: solid;
+	border-width: thin;
+	border-color: gray;
+}
+
+div .post{
+	border-bottom-style: solid;
+	border-width: thin;
+	border-color: gray;
+	padding-top: 15px;
+}
+
+div .post footer{
+	padding-bottom: 50px;
+}
+
+#post-556{
+	margin-bottom:50px;
+}
+
+article pre{
+	border-style: solid;
+	border-width: thin;
+	border-color: #EDEDED;
+	padding:20px;
+	overflow: auto;
+}
+
+h3.widget-title{	
+	color: gray;
+	font-size: 16px;
+}
+
+aside.widget ul{
+	list-style-type: none;
+	margin-left:-38px;
+}
+
+aside.widget li{
+	padding-bottom: 5px;
+}
+
+aside.widget li a{
+	font-size:14px;
+}
+
+
+
+h3.assistive-text{
+	color: white; 
+} 
+	
+#wp-calendar caption{
+	padding
+	font-family: "Trebuchet MS", Helvetica, sans-serif;
+	font-size: 16px;
+	color: gray;
+	text-align: left;
+	padding-bottom: 10px;
+}
+
+#wp-calendar thead tr th{
+	padding-right: 25px;
+	color: #FF1543;
+}
+
+#wp-calendar tbody tr td{
+	color:gray;
+}
+
+#prev {
+	padding-top: 10px;
+}
+
+#nav-below{
+	width: 100%;
+	height:40px;
+	/* Adds the transparent background */
+	text-align: center;
+	position: relative;
+}
+
+#nav-below h3.assistive-text{
+	color: #2E2D28;
+	position: relative;
+	text-align: left;
+}
+
+#nav-below div.nav-previous{
+	font-size: 22px;
+	text-align: left;
+
+}
+
+#nav-below div.nav-previous a {
+	color: #FF1543;
+}
+
+#nav-below div.nav-previous a:hover {
+	color: gray;
+}
+
+aside.widget{
+	padding-bottom:35px;
+}
+
+#colophon{
+	clear: both;
+	padding-top: 100px;
+}
+
+#calendar-2{
+	overflow: auto;
+}
+
