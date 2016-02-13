@@ -1,4 +1,5 @@
 <?php
+
 if(!empty($_REQUEST['password']))
 {
     //In real life, probably do a user/pw lookup in DB

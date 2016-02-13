@@ -1,4 +1,4 @@
-def toJSArray(textFile):
+def toJSObject(textFile):
 
     try:
         L = []
@@ -9,16 +9,16 @@ def toJSArray(textFile):
                 L.append(line.strip('\n'))
 
         with open(textFile, "w+") as fileHandle:
-            fileHandle.write("var emailDomains = [\n")
+            fileHandle.write("var emailDomains = {\n")
 
             for item in L:
-                fileHandle.write("\"" + item + "\",\n")
+                fileHandle.write("\"" + item + "\" : " + "\"" + item + "\",\n")
 
-            fileHandle.write("]")
+            fileHandle.write("}")
 
     except:
         print("FAIL")
         pass
 
 if __name__ == '__main__':
-    toJSArray("emailDomains.txt")
+    toJSObject("emailDomains.txt")

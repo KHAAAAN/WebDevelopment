@@ -32,17 +32,39 @@ foreach($class_days as $key => $value)
     $class_days_checked[$key] = '';
 }
 
-//print_r($_REQUEST);
+print_r($_REQUEST);
 
 //did we receive form data?
 $errors = array();
+$arr = array();
+
 if(!empty($_REQUEST['submit-form']))
 {
     //populate old form values
-    foreach($_REQUEST as $key => $value)
-    {
-        $form_values[$key] = $value;
-    }
+    foreach($_REQUEST as $key => $value){
+
+			if($key == "class-days"){
+				foreach($key as $day){
+					$arr[] = $day;
+				}	
+			}
+			else if($key != "submit-form"){
+					$arr[] = $value;
+					print_r("HERE ");
+			}
+			$form_values[$key] = $value;
+
+	}
+
+		//we might ask: are error free?  If so, save to DB, file, etc.
+		if(empty($errors) || count($errors) == 0){
+				print_r("HERE 2");
+				$fp = fopen('data.csv', 'a');
+
+					fputcsv($fp, $arr);
+
+					fclose($fp);
+		}
 
     //update CB values
     if(!empty($_REQUEST['class-days']))
@@ -78,7 +100,24 @@ if(!empty($_REQUEST['submit-form']))
         {
             $errors[] = 'Names cannot contain numbers or special characters';
         }
-    }
+	}
+
+	//validate class standing
+	if(empty($_REQUEST['class-standing']) || count($_REQUEST['class-standing'] ) == 0){
+		$errors[] = 'Please select your class standing';
+	}
+
+	//validate Email
+	if(empty($_REQUEST['email']) || count($_REQUEST['email'] ) == 0){
+		
+		$errors[] = 'Please enter a valid email';
+	}
+
+	//validate gender
+	if(empty($_REQUEST['gender']) || count($_REQUEST['gender'] ) == 0){
+		
+		$errors[] = 'Please select a gender';
+	}
 
     //validate checkbox data
     //Q1: did we get any CB data?
@@ -87,10 +126,16 @@ if(!empty($_REQUEST['submit-form']))
     {
         $errors[] = 'Please select at least one day that you have class';
     }
+	
+	//validate gender
+	if(empty($_REQUEST['gender']) || count($_REQUEST['gender'] ) == 0){
+		
+		$errors[] = 'Please select a role';
+	}
 
 }
 
-//we might ask: are error free?  If so, save to DB, file, etc.
+
 
 ?>
 
@@ -370,7 +415,7 @@ if(!empty($_REQUEST['submit-form']))
 
         document.addEventListener("DOMContentLoaded", function ()
         {
-			validateNameTextBox();
+			//validateNameTextBox();
 			init();
 
             //validation after we get data
@@ -398,7 +443,7 @@ if(!empty($_REQUEST['submit-form']))
 		body {
 			font-family: "Trebuchet MS", Helvetica, sans-serf;
 			margin: 0px;
-			background-color: #D2D4F5;
+			background-color: rgba(128, 128, 128, 0.16);
 			padding: 0;
 		}
         .error-message
@@ -416,7 +461,7 @@ if(!empty($_REQUEST['submit-form']))
         .question h1
         {
             width:150px;
-            font-size:12px;
+			font-size:12px;
         }
 
         .error-message
@@ -435,7 +480,6 @@ if(!empty($_REQUEST['submit-form']))
 
 		div.topbar{
 			background: rgba(0, 0, 0, 0.86);
-			color:#FFFFFF;
 			top: 0;
 			width: 100%;
 			height:50px;
@@ -447,6 +491,7 @@ if(!empty($_REQUEST['submit-form']))
 		div.topbar a{
 			line-height:2;
 			font-size: 24px;
+			color: rgb(197, 10, 10);
 		}
 
 		#form1{
@@ -480,19 +525,70 @@ if(!empty($_REQUEST['submit-form']))
 			
 		}
 
-		#ul-days li input{
-				
-		}
-
 		#ul-days li label{
 			margin-left:-7px;	
 		}
+		
+		#submit-form{
+			width: 10em;
+			height: 4em;
+			font-size:24px;
+			margin-left: 12em;
+			color: rgb(197, 10, 10);
+			background-color: rgba(0, 0, 0, 0.86);
+			font-weight: bold;
+		}
+
+		#submit-form:hover{
+			background-color: rgba(0, 0, 0, 0.70);
+			color: white;
+		}
+
+		#a-admin{
+			text-decoration:none;
+		}	
+
+		#a-admin:hover{
+			color: white;
+		}	
+
+		#CCS{
+			position: absolute;
+			font-size: 15px;
+			font-weight:bold;
+			height:50px;
+			padding-top: 15px;
+			padding-left: 10px;
+		}	
+
+		#CCS a{
+			color: white;
+			text-decoration: none;
+		}
+
+		#CCS a:hover{
+
+			color: gray;
+		}	
 	
     </style>
 </head>
+
 <body>
-	<div class="topbar"><a>Cougar Club Survey</a></div>
-	
+
+		<form id="form-admin" action="admin.php">
+		</form>
+
+	<div id="CCS">	
+			<a id="a-admin" href=# onclick='document.forms["form-admin"].submit(); return false;'>admin</a>
+	</div>
+		<div class="topbar">
+			<div>
+			<a>Cougar Club Survey</a>
+			</div>
+		</div>
+
+		
     <article id="error-messages">
         <?php if(count($errors) > 0): ?>
             <h1>Errors were encountered in your submission</h1>
@@ -507,9 +603,8 @@ if(!empty($_REQUEST['submit-form']))
     <form id="form1" method="post" action="<?php print $_SERVER['PHP_SELF']; ?>">
         <article class="question">
             <div class="col0"><h1><label for="name"><a>Name:</a></label></h1></div>
-            <div class="col1" id="name-input"><input id="name" name="name" type="text" size="20"
+            <div class="col1" id="name-input"><input required="required" id="name" name="name" type="text" size="20"
                         value="<?php print $form_values['name']; ?>"
-                        required="required"
                 /> </div>
             <div id="name-error" class="error-message col1"
                  style="<?php
@@ -564,30 +659,30 @@ if(!empty($_REQUEST['submit-form']))
 		</article>
 
 		<article class="question">
-			<div class="col0"><h1><a>Exp. Graduation:</a></h1></div>
+			<div class="col0"><h1><label for="name"><a>Exp. Graduation:</a><label></h1></div>
 			
 			<div class="col1">
 				<div>
-					<select id="select-month">
+					<select id="select-month" name="month">
 					</select>
 				</div>
 				
 				<div style="padding-left: 5px;">
-					<select id="select-day">
+					<select id="select-day" name="day">
 					</select>
 				</div>
 				
 				<div style="padding-left: 5px;">
-					<select id="select-year">
+					<select id="select-year" name="year">
 					</select>
 				</div>
 			</div>
 		</article>
 		
 		<article class="question">
-			<div class="col0"><h1><a>Major:</a></h1></div>
+			<div class="col0"><h1><label for="name"><a>Major:</a></label></h1></div>
 			<div class="col1">
-				<select id="select-major"> </select>		
+				<select id="select-major" name="major"> </select>		
 			</div>		
 			
 		</article>
@@ -595,15 +690,17 @@ if(!empty($_REQUEST['submit-form']))
 		<article class="question">
 			<div class="col0"><h1><a>Email:</a></h1></div>
 			<div class="col1">
-				<input id="input-email" size="30" type="email" required="required"></input>
+				<input required="required" id="input-email" name="email" size="30" type="email"></input>
 			</div>		
-			
+			<div class="col1">
+				<a style="font-size:18px; font-weight:bold;" id="email-error"></a> 
+			</div>	
 		</article>
 
 		<article class="question">
 			<div class="col0"><h1><a>Hobbies:</a></h1></div>
 			<div class="col1">
-				<textarea rows="4" cols="50"  id="textarea-hobbies"></textarea>
+				<textarea name="hobbies" rows="4" cols="50" id="textarea-hobbies"></textarea>
 			</div>		
 			
 		</article>
@@ -653,9 +750,7 @@ if(!empty($_REQUEST['submit-form']))
 			<div class="col0"><h1><a>Volunteer Activities:</a></h1></div>
 			
 			<div class="col1">
-					<select id="select-activity">
-						<option default>-- Select Activity --</option>
-					 </select>	
+				<textarea rows="4" cols="50"  id="textarea-volunteer" name="volunteer"></textarea>
 			</div>
 		</article>
 
@@ -680,6 +775,10 @@ if(!empty($_REQUEST['submit-form']))
 		<div class="col0">
 				<button type="submit" name="submit-form" id="submit-form" value="submit">Submit</button>
 		</div>
-    </form>
+
+
+	</form>
+		
+
 </body>
 </html>
