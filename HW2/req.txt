@@ -1,0 +1,3 @@
+admin can be simple password form that loads CSV on success
+Okay have "admin link" on survey form 
+HTML validation is OK as long as it cover edge cases 
